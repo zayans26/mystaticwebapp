@@ -85,6 +85,12 @@
     .product-table th {
       background: #4CAF50;
       color: white;
+      cursor: pointer;
+    }
+
+    .editable {
+      background-color: #f9f9f9;
+      cursor: pointer;
     }
 
     .footer {
@@ -107,10 +113,6 @@
     </ul>
   </div>
 
-  <header>
-    <h1>Product Management</h1>
-  </header>
-
   <div class="products-container">
     <h2>Products List</h2>
     <table class="product-table" id="productTable">
@@ -121,6 +123,7 @@
           <th>Product Number</th>
           <th>Color</th>
           <th>List Price</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -157,12 +160,47 @@
             row.insertCell(1).innerText = product.Name;
             row.insertCell(2).innerText = product.ProductNumber;
             row.insertCell(3).innerText = product.Color;
-            row.insertCell(4).innerText = product.ListPrice;
+            
+            const priceCell = row.insertCell(4);
+            priceCell.innerText = product.ListPrice;
+            priceCell.classList.add('editable');
+            priceCell.setAttribute('contenteditable', 'true');
+
+            const actionCell = row.insertCell(5);
+            const saveButton = document.createElement('button');
+            saveButton.innerText = 'Save';
+            saveButton.onclick = () => updatePrice(product.ProductID, priceCell.innerText);
+            actionCell.appendChild(saveButton);
           });
         })
         .catch(error => {
           console.error('There was an error fetching the product data:', error);
         });
+    }
+
+    function updatePrice(productId, newPrice) {
+      fetch('https://zayan.azurewebsites.net/api/updateproduct?code=yjNc6UcUuR5rmQ1kbV0uaS76qPXhpOSFjfsramzvBgy5AzFuVIaaOA%3D%3D', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ProductID: productId,
+          ListPrice: parseFloat(newPrice)
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to update product');
+        }
+        return response.json();
+      })
+      .then(data => {
+        alert('Product price updated successfully');
+      })
+      .catch(error => {
+        console.error('There was an error updating the product:', error);
+      });
     }
   </script>
 </body>
