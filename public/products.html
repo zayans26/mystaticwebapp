@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products - Zayan's Demo Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -140,10 +139,15 @@
     });
 
     function fetchProductData() {
-      // Fetch data from the Azure Function API
-      axios.get('https://zayan.azurewebsites.net/api/getproducts?code=QMCZWMYNlG0SJwAV44VhKGh12DBZx72s_6Y_qtagb2ZzAzFum84rcg%3D%3D')
-        .then(function(response) {
-          const products = response.data;
+      // Fetch data from the Azure Function API using Fetch API
+      fetch('https://zayan.azurewebsites.net/api/getproducts?code=QMCZWMYNlG0SJwAV44VhKGh12DBZx72s_6Y_qtagb2ZzAzFum84rcg%3D%3D')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(products => {
           const productTable = document.getElementById('productTable').getElementsByTagName('tbody')[0];
           productTable.innerHTML = '';
 
@@ -156,7 +160,7 @@
             row.insertCell(4).innerText = product.ListPrice;
           });
         })
-        .catch(function(error) {
+        .catch(error => {
           console.error('There was an error fetching the product data:', error);
         });
     }
