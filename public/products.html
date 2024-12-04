@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products - Zayan's Demo Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      line-height: 1.6;
+      font-size: 18px;
+      color: #333;
+      background-color: #f0f2f5;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #4CAF50;
+      padding: 10px 20px;
+      color: white;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+    }
+
+    .menu li {
+      margin: 0 15px;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .menu a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      color: white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+
+    .products-container {
+      margin: 20px;
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-table th, .product-table td {
+      padding: 15px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .product-table th {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #4CAF50;
+      color: white;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="logo">Zayan's Demo</div>
+    <ul class="menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="#">Customers</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+
+  <header>
+    <h1>Product Management</h1>
+  </header>
+
+  <div class="products-container">
+    <h2>Products List</h2>
+    <table class="product-table" id="productTable">
+      <thead>
+        <tr>
+          <th>Product ID</th>
+          <th>Name</th>
+          <th>Product Number</th>
+          <th>Color</th>
+          <th>List Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be populated here -->
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2024 Zayan's Demo Portal. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetchProductData();
+    });
+
+    function fetchProductData() {
+      // Fetch data from the Azure Function API
+      axios.get('https://zayan.azurewebsites.net/api/getproducts?code=QMCZWMYNlG0SJwAV44VhKGh12DBZx72s_6Y_qtagb2ZzAzFum84rcg%3D%3D')
+        .then(function(response) {
+          const products = response.data;
+          const productTable = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+          productTable.innerHTML = '';
+
+          products.forEach(product => {
+            const row = productTable.insertRow();
+            row.insertCell(0).innerText = product.ProductID;
+            row.insertCell(1).innerText = product.Name;
+            row.insertCell(2).innerText = product.ProductNumber;
+            row.insertCell(3).innerText = product.Color;
+            row.insertCell(4).innerText = product.ListPrice;
+          });
+        })
+        .catch(function(error) {
+          console.error('There was an error fetching the product data:', error);
+        });
+    }
+  </script>
+</body>
+</html>
