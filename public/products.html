@@ -93,6 +93,21 @@
       cursor: pointer;
     }
 
+    .save-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .save-button:hover {
+      background-color: #45a049;
+    }
+
     .footer {
       text-align: center;
       padding: 20px;
@@ -168,7 +183,8 @@
 
             const actionCell = row.insertCell(5);
             const saveButton = document.createElement('button');
-            saveButton.innerText = 'Save';
+            saveButton.innerText = 'Save Price';
+            saveButton.classList.add('save-button');
             saveButton.onclick = () => updatePrice(product.ProductID, priceCell.innerText);
             actionCell.appendChild(saveButton);
           });
