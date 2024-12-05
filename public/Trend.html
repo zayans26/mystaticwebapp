@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trend Dashboard - Zayan's Demo Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      line-height: 1.6;
+      font-size: 18px;
+      color: #333;
+      background-color: #f0f2f5;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #4CAF50;
+      padding: 10px 20px;
+      color: white;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+    }
+
+    .menu li {
+      margin: 0 15px;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .menu a:hover {
+      text-decoration: underline;
+    }
+
+    .dashboard-container {
+      margin: 20px;
+    }
+
+    .charts-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .chart {
+      flex: 1;
+      min-width: 300px;
+      max-width: 600px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #4CAF50;
+      color: white;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="logo">Zayan's Demo</div>
+    <ul class="menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="#">Trend Analysis</a></li>
+    </ul>
+  </div>
+
+  <div class="dashboard-container">
+    <h2>Sample trend analyis Dashboard with mock data</h2>
+    <div class="charts-container">
+      <div class="chart">
+        <canvas id="customerCreationChart"></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="modificationFrequencyChart"></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="customerEmailDistributionChart"></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="topCustomersChart"></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="bottomCustomersChart"></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="customerRetentionChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2024 Zayan's Demo Portal. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      createCharts();
+    });
+
+    function createCharts() {
+      // Sample Data for Customer Trends
+      const customerData = [
+        {
+          "id": "82441745682",
+          "createdate": "2024-12-05T13:31:18.721Z",
+          "firstname": "Isabella",
+          "lastname": "Lopez",
+          "email": "isabella@example.com"
+        },
+        {
+          "id": "82442684561",
+          "createdate": "2024-12-05T13:32:47.957Z",
+          "firstname": "Alice",
+          "lastname": "Johnson",
+          "email": "alice@example.com"
+        },
+        {
+          "id": "82442684562",
+          "createdate": "2024-12-05T13:32:47.957Z",
+          "firstname": "Bob",
+          "lastname": "Brown",
+          "email": "bob@example.com"
+        },
+        {
+          "id": "82442684563",
+          "createdate": "2024-12-05T13:32:47.957Z",
+          "firstname": "Charlie",
+          "lastname": "Davis",
+          "email": "charlie@example.com"
+        },
+        {
+          "id": "82442684564",
+          "createdate": "2024-12-05T13:32:47.957Z",
+          "firstname": "Daniel",
+          "lastname": "Miller",
+          "email": "daniel@example.com"
+        },
+        {
+          "id": "82442684565",
+          "createdate": "2024-12-05T13:32:47.957Z",
+          "firstname": "Emma",
+          "lastname": "Wilson",
+          "email": "emma@example.com"
+        }
+      ];
+
+      // Customer Creation Chart
+      const creationData = customerData.map(customer => new Date(customer.createdate).toLocaleDateString());
+      const customerCreationCtx = document.getElementById('customerCreationChart').getContext('2d');
+      new Chart(customerCreationCtx, {
+        type: 'line',
+        data: {
+          labels: creationData,
+          datasets: [{
+            label: 'Customer Creation Over Time',
+            data: creationData.map((_, index) => index + 1),
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Modification Frequency Chart
+      const modificationFrequencyCtx = document.getElementById('modificationFrequencyChart').getContext('2d');
+      new Chart(modificationFrequencyCtx, {
+        type: 'bar',
+        data: {
+          labels: customerData.map(customer => customer.firstname),
+          datasets: [{
+            label: 'Modification Frequency',
+            data: customerData.map(() => Math.floor(Math.random() * 10)),
+            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+            borderColor: 'rgba(255, 159, 64, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Customer Email Distribution Chart
+      const emailProviders = ['example.com', 'demo.com', 'test.com'];
+      const emailDistributionCtx = document.getElementById('customerEmailDistributionChart').getContext('2d');
+      new Chart(emailDistributionCtx, {
+        type: 'pie',
+        data: {
+          labels: emailProviders,
+          datasets: [{
+            label: 'Email Provider Distribution',
+            data: [4, 3, 2],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+      // Top Customers by Activity Chart
+      const topCustomersCtx = document.getElementById('topCustomersChart').getContext('2d');
+      new Chart(topCustomersCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Isabella', 'Alice', 'Daniel'],
+          datasets: [{
+            label: 'Top Customers',
+            data: [150, 130, 120],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Bottom Customers by Activity Chart
+      const bottomCustomersCtx = document.getElementById('bottomCustomersChart').getContext('2d');
+      new Chart(bottomCustomersCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Frank', 'Emma', 'Charlie'],
+          datasets: [{
+            label: 'Bottom Customers',
+            data: [50, 40, 30],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Customer Retention Chart
+      const retentionCtx = document.getElementById('customerRetentionChart').getContext('2d');
+      new Chart(retentionCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Retained', 'Churned'],
+          datasets: [{
+            label: 'Customer Retention',
+            data: [70, 30],
+            backgroundColor: ['#4CAF50', '#F44336'],
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+    }
+  </script>
+</body>
+</html>
