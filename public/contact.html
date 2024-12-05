@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Page - Zayan's Demo Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      line-height: 1.6;
+      font-size: 18px;
+      color: #333;
+      background-color: #f0f2f5;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #4CAF50;
+      padding: 10px 20px;
+      color: white;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+    }
+
+    .menu li {
+      margin: 0 15px;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .menu a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      color: white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+
+    .contact-container {
+      margin: 20px;
+    }
+
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-table th, .contact-table td {
+      padding: 15px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .contact-table th {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #4CAF50;
+      color: white;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="logo">Zayan's Demo</div>
+    <ul class="menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="#">Contacts</a></li>
+    </ul>
+  </div>
+
+  <div class="contact-container">
+    <h2>Contact List</h2>
+    <table class="contact-table" id="contactTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Created Date</th>
+          <th>Last Modified Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be populated here -->
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2024 Zayan's Demo Portal. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetchContactData();
+    });
+
+    function fetchContactData() {
+      // Fetch data from the HubSpot API
+      fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer pat-na1-314bc253-395b-445f-a8be-6d584a798403'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const contacts = data.results;
+          const contactTable = document.getElementById('contactTable').getElementsByTagName('tbody')[0];
+          contactTable.innerHTML = '';
+
+          contacts.forEach(contact => {
+            const row = contactTable.insertRow();
+            row.insertCell(0).innerText = contact.id;
+            row.insertCell(1).innerText = contact.properties.firstname;
+            row.insertCell(2).innerText = contact.properties.lastname;
+            row.insertCell(3).innerText = contact.properties.email;
+            row.insertCell(4).innerText = new Date(contact.properties.createdate).toLocaleDateString();
+            row.insertCell(5).innerText = new Date(contact.properties.lastmodifieddate).toLocaleDateString();
+          });
+        })
+        .catch(error => {
+          console.error('There was an error fetching the contact data:', error);
+        });
+    }
+  </script>
+</body>
+</html>
