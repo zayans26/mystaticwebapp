@@ -137,12 +137,8 @@
 
     function fetchContactData() {
       // Fetch data from the HubSpot API
-      fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
-        method: 'GET',
-        mode: 'no-cors',
-        headers: {
-          'Authorization': 'Bearer pat-na1-314bc253-395b-445f-a8be-6d584a798403'
-        }
+      fetch('https://zayan.azurewebsites.net/api/getcontacts?code=lutmGf10cwlzsWa26nOhMkBV_bTCAqjJJ1fYhJtwaTR7AzFuGdYNmw%3D%3D', {
+        method: 'GET'
       })
         .then(response => {
           if (!response.ok) {
@@ -168,6 +164,7 @@
         .catch(error => {
           console.error('There was an error fetching the contact data:', error);
         });
+        
     }
   </script>
 </body>
