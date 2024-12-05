@@ -139,6 +139,7 @@
       // Fetch data from the HubSpot API
       fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
         method: 'GET',
+        mode: 'no-cors',
         headers: {
           'Authorization': 'Bearer pat-na1-314bc253-395b-445f-a8be-6d584a798403'
         }
